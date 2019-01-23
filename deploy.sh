@@ -7,26 +7,21 @@ git="git@github.com:dongyuanxin/design-patterns.git"
 set -e
 
 # 生成静态文件
-# vuepress build .
+vuepress build .
 
 # 进入生成的文件夹
-# cd .vuepress/dist/
+cd .vuepress/dist/
 
-# git init
-# git add -A
-# git commit -m 'deploy'
-
-echo $1;
+git init
+git add -A
+git commit -m 'deploy'
 
 if [ $1 == "https" ]
 then
   git push -f ${https} master:gh-pages
-else if [ $1 == "ssh" ]
-  git push -f ${ssh} master:gh-pages
+elif [ $1 == "ssh" ]
 then
-  git push -f git@github.com:dongyuanxin/design-patterns.git master:gh-pages
+  git push -f ${ssh} master:gh-pages
 fi
 
-# git push -f https://github.com/dongyuanxin/design-patterns.git master:gh-pages
-
-# cd -
+cd -
