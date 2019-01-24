@@ -2,13 +2,11 @@ const ROOT = ".";
 
 const sidebar = require("./vendor/sidebarConfig")(ROOT);
 const mathjax = require("./vendor/mathjax");
-const ga = require("./vendor/ga");
 const routeListen = require("./vendor/routeListen");
 const leancloud = require("./vendor/leancloud");
 
 module.exports = {
   head: [
-    ["script", {}, ga],
     [
       "script",
       {
@@ -31,6 +29,7 @@ module.exports = {
   ],
   base: "/design-patterns/",
   title: "设计模式手册",
+  ga: "UA-124601890-1",
   description: "设计模式, Web, 算法, JavaScript, Python",
   markdown: {
     toc: { includeLevel: [1, 2, 3] }

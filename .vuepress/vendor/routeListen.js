@@ -15,9 +15,6 @@ const handleRouteChange = (() => {
       console.log("At", now, ", you visit", nowHref);
       preHref = nowHref;
       
-      // google analysis
-      ga("set", "page", nowHref);
-      ga("send", "pageview");
       // mathjax
       render(); // 渲染数学公式
       
