@@ -8,6 +8,20 @@ const leancloud = require("./vendor/leancloud");
 module.exports = {
   head: [
     [
+      "meta",
+      {
+        name: "author",
+        content: "董沅鑫, yuanxin.me@gmail.com"
+      }
+    ],
+    [
+      "meta",
+      {
+        name: "keywords",
+        content: "个人网站, 设计模式, Web, 算法, JavaScript, Python"
+      }
+    ],
+    [
       "script",
       {
         type: "text/javascript",
@@ -30,7 +44,7 @@ module.exports = {
   base: "/design-patterns/",
   title: "设计模式手册",
   ga: "UA-124601890-1",
-  description: "设计模式, Web, 算法, JavaScript, Python",
+  description: "设计模式专题手册, 涵盖JavaScript, Python等多种语言的实现, 董沅鑫的个人网站",
   markdown: {
     toc: { includeLevel: [1, 2, 3] }
   },
