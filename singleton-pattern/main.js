@@ -1,18 +1,22 @@
-const Singleton = function() {};
-
-Singleton.getInstance = (function() {
-  // 由于es6没有静态类型,故闭包: 函数外部无法访问 instance
-  let instance = null;
-  return function() {
+const getSingleton = (className) => {
+  let singleton = null;
+  return () => {
     // 检查是否存在实例
-    if (!instance) {
-      instance = new Singleton();
-    }
-    return instance;
-  };
-})();
+    // 如果不存在, 那么创建
+    if(!singleton) singleton = new className();
+    return singleton;
+  }
+};
 
-let s1 = Singleton.getInstance();
-let s2 = Singleton.getInstance();
+/*********** 以下是测试代码 ***********/
+// 为了方便展示, 这里定义一个空类
+class Demo {};
 
-console.log(s1 === s2);
+// 创建指定类的单例生成函数
+let getDemoSingleton = getSingleton(Demo);
+
+let d1 = getDemoSingleton(),
+  d2 = getDemoSingleton();
+
+// 输出 true
+console.log(d1 === d2);
