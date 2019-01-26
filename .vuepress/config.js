@@ -46,8 +46,7 @@ module.exports = {
         text: '📚干货',
         items: [
           { text: '设计模式 | 食用手册', link: '/' },
-          { text: 'Webpack4 | 系列教程', link: 'https://godbmw.com/categories/webpack4%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B/' },
-          { text: 'LeetCode | 解题报告', link: 'https://godbmw.com/leetcode/' }
+          { text: 'Webpack4 | 系列教程', link: 'https://godbmw.com/categories/webpack4%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B/' }
         ]
       },
       { text: "👱抓我", link: "https://godbmw.com/" }
