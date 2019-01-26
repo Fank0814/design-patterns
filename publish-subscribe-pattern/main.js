@@ -1,77 +1,72 @@
-const Event = {
-  clientList: {},
+// 数组置空：
+// arr = []; arr.length = 0; arr.splice(0, arr.length)
+class Event {
+  constructor() {
+    this._cache = {};
+  }
 
-  // 绑定事件监听
-  listen(key, fn){
-    if(! this.clientList[key]){
-      this.clientList[key] = [];
+  // 注册事件：如果不存在此种type，创建相关数组
+  on(type, callback) {
+    this._cache[type] = this._cache[type] || [];
+    let fns = this._cache[type];
+    if (fns.indexOf(callback) === -1) {
+      fns.push(callback);
     }
-    this.clientList[key].push(fn);
-    return true;
-  },
+    return this;
+  }
 
-  // 触发对应事件
-  trigger(){
-    const key = Array.prototype.shift.apply(arguments),
-      fns = this.clientList[key];
-    
-      if(!fns || fns.length === 0){
-        return false;
-      }
-
-      for(let fn of fns){
-        fn.apply(null, arguments);
-      }
-
-      return true;
-  },
-
-  // 移除相关事件
-  remove(key, fn){
-    let fns = this.clientList[key];
-
-    // 如果之前没有绑定事件
-    // 或者没有指明要移除的事件
-    // 直接返回
-    if(!fns || !fn){
-      return false;
+  // 触发事件：对于一个type中的所有事件函数，均进行触发
+  trigger(type, ...data) {
+    let fns = this._cache[type];
+    if (Array.isArray(fns)) {
+      fns.forEach(fn => {
+        fn(...data);
+      });
     }
-    
-    // 反向遍历移除置指定事件函数
-    for(let l = fns.length - 1; l >= 0; l--){
-      let _fn = fns[l];
-      if(_fn === fn){
-        fns.splice(l, 1);
+    return this;
+  }
+
+  // 删除事件：删除事件类型对应的array
+  off(type, callback) {
+    let fns = this._cache[type];
+    // 检查是否存在type的事件绑定
+    if (Array.isArray(fns)) {
+      if (callback) {
+        // 卸载指定的回调函数
+        let index = fns.indexOf(callback);
+        if (index !== -1) {
+          fns.splice(index, 1);
+        }
+      } else {
+        // 全部清空
+        fns = [];
       }
     }
-
-    return true;
+    return this;
   }
 }
 
-// 为对象动态安装 发布-订阅 功能
-const installEvent = (obj) => {
-  for(let key in Event){
-    obj[key] = Event[key];
+class SaleOffice extends Event {
+  constructor(){
+    super();
   }
 }
 
-let salesOffices = {};
-installEvent(salesOffices);
+let saleOffice = new SaleOffice();
 
-salesOffices.listen("event01", fn1 = (price) => {
+saleOffice.on("event01", fn1 = (price) => {
   console.log("Price is", price, "at event01");
-})
+});
 
-salesOffices.listen("event02", fn2 = (price) => {
+saleOffice.on("event02", fn2 = (price) => {
   console.log("Price is", price, "at event02");
-})
+});
 
-salesOffices.trigger("event01", 1000);
-salesOffices.trigger("event02", 2000);
+saleOffice.trigger("event01", 1000);
+saleOffice.trigger("event02", 2000);
 
-salesOffices.remove("event01", fn1);
+saleOffice.off("event01", fn1);
 
-// 输出: false
+// 没有任何输出
 // 说明删除成功
-console.log(salesOffices.trigger("event01", 1000));
+saleOffice.trigger("event01", 1000);
