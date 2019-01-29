@@ -7,10 +7,8 @@ title: "命令模式"
 > 命令模式是一种数据驱动的设计模式，它属于行为型模式。
 
 1. 请求以命令的形式包裹在对象中，并传给调用对象。
-2. 调用对象寻找可以处理该命令的合适的对象，并把该命令传给相应的对象。
-3. 该对象执行命令。
-
-在这三步骤中，分别有3个不同的主体：**发送者、传递者和执行者**。在实现过程中，需要特别关注。
+2. 调用对象寻找可以处理该命令的合适的对象，并将其传给命令对象。
+3. 命令对象执行命令。
 
 ## 2. 应用场景
 
@@ -18,38 +16,62 @@ title: "命令模式"
 
 ## 3. 代码实现
 
-
 ### 3.1 ES6 实现
 
-`setCommand`方法为按钮指定了命令对象，命令对象为调用者（按钮）找到了接收者（`MenuBar`），并且执行了相关操作。**而按钮本身并不需要关心接收者和接受操作**。
+`Order`是抽象的命令对象，`RefreshOrder`和`LoadOrder`具体实现了Order命令。
+
+`Caller`是命令调度者，来选择合适的命令对象。
 
 ```javascript
-// 接受到命令，执行相关操作
-const MenuBar = {
-  refresh(){
-    console.log("刷新菜单页面");
+class Order {
+  execute() {
+    throw new Error('Empty Method');
   }
-};
+}
 
-// 命令对象，execute方法就是执行相关命令
-const RefreshMenuBarCommand = receiver => {
-  return {
-    execute(){
-      receiver.refresh();
-    }
+class RefreshOrder extends Order {
+  constructor() {
+    super();
   }
-};
 
-// 为按钮对象指定对应的 对象 
-const setCommand = (button, command) => {
-  button.onclick = () => {
-    command.execute();
+  execute() {
+    console.log('刷新页面')
   }
-};
+}
 
-let refreshMenuBarCommand = RefreshMenuBarCommand(MenuBar);
-let button = document.querySelector("button");
-setCommand(button, refreshMenuBarCommand);
+class LoadOrder extends Order {
+  constructor() {
+    super();
+  }
+
+  execute() {
+    console.log('加载数据')
+  }
+}
+
+class Caller {
+  constructor() {
+    this.orders = [];
+  }
+
+  add(order) {
+    this.orders.push(order);
+  }
+
+  click() {
+    // 寻找处理click指令的 命令对象
+    // 为了方便展示, 这里直接调用所有命令对象
+    this.orders.forEach(order => order.execute());
+  }
+}
+
+/*********** 以下是测试代码 *********/
+const caller = new Caller();
+caller.add(new LoadOrder());
+caller.add(new RefreshOrder());
+
+const button = document.querySelector('button');
+button.addEventListener('click', () => caller.click());
 ```
 
 下面是同级目录的html代码，在谷歌浏览器中打开创建的`index.html`，并且打开控制台，即可看到效果。

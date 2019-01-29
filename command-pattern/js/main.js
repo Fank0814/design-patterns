@@ -1,26 +1,49 @@
-// 接受到命令，执行相关操作
-const MenuBar = {
-  refresh(){
-    console.log("刷新菜单页面");
+class Order {
+  execute() {
+    throw new Error('Empty Method');
   }
-};
+}
 
-// 命令对象，execute方法就是执行相关命令
-const RefreshMenuBarCommand = receiver => {
-  return {
-    execute(){
-      receiver.refresh();
-    }
+class RefreshOrder extends Order {
+  constructor() {
+    super();
   }
-};
 
-// 为按钮对象指定对应的 对象 
-const setCommand = (button, command) => {
-  button.onclick = () => {
-    command.execute();
+  execute() {
+    console.log('刷新页面')
   }
-};
+}
 
-let refreshMenuBarCommand = RefreshMenuBarCommand(MenuBar);
-let button = document.querySelector("button");
-setCommand(button, refreshMenuBarCommand);
+class LoadOrder extends Order {
+  constructor() {
+    super();
+  }
+
+  execute() {
+    console.log('加载数据')
+  }
+}
+
+class Caller {
+  constructor() {
+    this.orders = [];
+  }
+
+  add(order) {
+    this.orders.push(order);
+  }
+
+  click() {
+    // 寻找处理click指令的 命令对象
+    // 为了方便展示, 这里直接调用所有命令对象
+    this.orders.forEach(order => order.execute());
+  }
+}
+
+/*********** 以下是测试代码 *********/
+const caller = new Caller();
+caller.add(new LoadOrder());
+caller.add(new RefreshOrder());
+
+const button = document.querySelector('button');
+button.addEventListener('click', () => caller.click());
