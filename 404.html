@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>设计模式手册</title>
+    <meta name="description" content="设计模式专题手册, 涵盖JavaScript, Python等多种语言的实现, 董沅鑫的个人网站">
+    <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  <meta name="keywords" content="个人网站, 设计模式, Web, 算法, JavaScript, Python">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  <script>
+const lcLog = pathname => {
+  pathname = decodeURIComponent(pathname);
+  let Counter = AV.Object.extend("Counter");
+  let counter = new Counter();
+  counter.set("visit_time", new Date().getTime().toString());
+  counter.set("user_agent", window.navigator.userAgent);
+  counter.set("identity_path", pathname);
+  counter.set("more_info", JSON.stringify(window.location));
+  let acl = new AV.ACL();
+  acl.setPublicReadAccess(true);
+  acl.setPublicWriteAccess(false);
+  counter.setACL(acl);
+  counter.save();
+};
+</script>
+  <script>
+const render = () => {
+  const mathjaxConfig = {
+    showProcessingMessages: false, //关闭js加载过程信息
+    messageStyle: "none", //不显示信息
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [["$", "$"], ["\(", "\)"]], //行内公式选择符
+      displayMath: [["$$", "$$"], ["\[", "\]"]], //段内公式选择符
+      skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+    },
+    "HTML-CSS": {
+      availableFonts: ["STIX", "TeX"], //可选字体
+      showMathMenu: false //关闭右击菜单显示
+    }
+  };
+  let mathjaxInterval = setInterval(() => {
+    if (!window.MathJax) {
+      console.log("not loaded");
+      return;
+    }
+    window.MathJax.Hub.Config(mathjaxConfig);
+    window.MathJax.Hub.Queue([
+      "Typeset",
+      MathJax.Hub,
+      document.getElementById("app")
+    ]);
+    clearInterval(mathjaxInterval);
+  }, 10);
+};
+
+document.addEventListener("DOMContentLoaded", render, false);
+</script>
+  <script>
+const initLc = () => {
+  try {
+    AV.init("j3TlSqBMjoXnrIrNYB5En5Y1-gzGzoHsz", "d2rWR1nq5chvzXzh3bSyB8ug");
+  } catch (error) {}
+}
+const handleRouteChange = (() => {
+  let preHref = "",
+    nowHref = "";
+  return () => {
+    setInterval(() => {
+      nowHref = window.location.origin + window.location.pathname;
+      if (preHref === nowHref) return;
+      let now = new Date().toTimeString();
+      console.log("At", now, ", you visit", nowHref);
+      preHref = nowHref;
+      
+      // mathjax
+      render(); // 渲染数学公式
+      
+      // leancloud counter
+      lcLog(window.location.pathname);
+    }, 1000 / 60);
+  };
+})();
+initLc();
+handleRouteChange();
+</script>
+    
+    <link rel="preload" href="/design-patterns/assets/css/0.styles.f2dff890.css" as="style"><link rel="preload" href="/design-patterns/assets/js/app.10ddfbb3.js" as="script"><link rel="prefetch" href="/design-patterns/assets/js/10.57c913aa.js"><link rel="prefetch" href="/design-patterns/assets/js/11.0475f44d.js"><link rel="prefetch" href="/design-patterns/assets/js/12.717c1a7e.js"><link rel="prefetch" href="/design-patterns/assets/js/13.eea178c5.js"><link rel="prefetch" href="/design-patterns/assets/js/14.2dff184c.js"><link rel="prefetch" href="/design-patterns/assets/js/15.41c36376.js"><link rel="prefetch" href="/design-patterns/assets/js/16.2fc0a288.js"><link rel="prefetch" href="/design-patterns/assets/js/17.154cd159.js"><link rel="prefetch" href="/design-patterns/assets/js/18.3a01ae65.js"><link rel="prefetch" href="/design-patterns/assets/js/19.ce5573fb.js"><link rel="prefetch" href="/design-patterns/assets/js/2.f35dc14e.js"><link rel="prefetch" href="/design-patterns/assets/js/20.2233f56b.js"><link rel="prefetch" href="/design-patterns/assets/js/3.4bc2a8e8.js"><link rel="prefetch" href="/design-patterns/assets/js/4.096f2477.js"><link rel="prefetch" href="/design-patterns/assets/js/5.8e08101a.js"><link rel="prefetch" href="/design-patterns/assets/js/6.2886ff14.js"><link rel="prefetch" href="/design-patterns/assets/js/7.c62e9009.js"><link rel="prefetch" href="/design-patterns/assets/js/8.376e9a47.js"><link rel="prefetch" href="/design-patterns/assets/js/9.5fa4328d.js">
+    <link rel="stylesheet" href="/design-patterns/assets/css/0.styles.f2dff890.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><div class="content"><h1>404</h1> <blockquote>How did we get here?</blockquote> <a href="/design-patterns/" class="router-link-active">Take me home.</a></div></div></div>
+    <script src="/design-patterns/assets/js/app.10ddfbb3.js" defer></script>
+  </body>
+</html>
